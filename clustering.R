@@ -1,7 +1,7 @@
 # Load data into dataframes
-# population_df = as.data.frame( read.csv("C:/repos/population_pyramid_analysis/pjangroup.csv",header=T,sep=";",dec=".") )
-setwd("/home/alvaro/repos/data_science/population_pyramid_analysis")
-population_df = as.data.frame( read.csv("pjangroup.csv",header=T,sep=";",dec=".") )
+population_df = as.data.frame( read.csv("C:/repos/population_pyramid_analysis/pjangroup.csv",header=T,sep=";",dec=".") )
+#setwd("/home/alvaro/repos/data_science/population_pyramid_analysis")
+#population_df = as.data.frame( read.csv("pjangroup.csv",header=T,sep=";",dec=".") )
 
 # Take only population pyramid data for 2001, remove sex=T
 population_df = population_df[population_df$TIME_PERIOD == '2001',]
@@ -80,24 +80,27 @@ country_clusters = data.frame("Country" = countries, "cluster2001" = km$cluster)
 # Poblational pyramids
 plot_pyramid_df <- function(df) {
   
-  ggplot(df, aes(x = age, fill = sex,
+  g = ggplot(df, aes(x = age, fill = sex,
                      y = ifelse(test = sex == "M",
                                 yes = -Poblation, no = Poblation))) + 
     geom_bar(stat = "identity") +
     scale_y_continuous(labels = abs, limits = max(df$Poblation) * c(-1,1)) +
     coord_flip()
+  g + labs(x = "Age", y = "Poblation") +labs(title = "Poblation pyramid")
 }
 
 plot_pyramid_country <- function(country) {
   df = initial_df[initial_df$geo==country,]
   df = df[df$age!='TOTAL',]
   df = df[df$sex!='T',]
-  ggplot(df, aes(x = age, fill = sex,
+  g = ggplot(df, aes(x = age, fill = sex,
                  y = ifelse(test = sex == "M",
                             yes = -OBS_VALUE, no = OBS_VALUE))) + 
     geom_bar(stat = "identity") +
     scale_y_continuous(labels = abs, limits = max(df$OBS_VALUE) * c(-1,1)) +
     coord_flip()
+
+  g + labs(x = "Age", y = "Poblation") +labs(title = "Poblation pyramid", subtitle = country)
 }
 
 # Take a random country dataframe just to extract sex and age_groups to use for centroids
