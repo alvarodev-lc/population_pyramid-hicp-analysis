@@ -102,5 +102,5 @@ plot_pyramid_df(cluster3_df)
 
 # Plot population pyramids by country
 plot_pyramid_country('FR')
-plot_pyramid_country('ES')
-plot_pyramid_country('MT')
+plot_pyramid_country('ME')
+plot_pyramid_country('RO')
