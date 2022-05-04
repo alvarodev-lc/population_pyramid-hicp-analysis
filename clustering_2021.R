@@ -4,7 +4,7 @@ population_df = as.data.frame( read.csv("C:/repos/population_pyramid_analysis/pj
 #population_df = as.data.frame( read.csv("pjangroup.csv",header=T,sep=";",dec=".") )
 
 # Take only population pyramid data for 2001
-population_df = population_df[population_df$TIME_PERIOD == '2001',]
+population_df = population_df[population_df$TIME_PERIOD == '2021',]
 
 
 # Remove unused columns
@@ -49,7 +49,7 @@ km = kmeans(kmdata, 3, nstart = 25)
 km
 
 # Prepare data and clustering results for plotting
-df = as.data.frame(kmdata_population[,1:54])
+df = as.data.frame(kmdata[,1:54])
 df$cluster = factor(km$cluster)
 centers=as.data.frame(km$centers)
 
