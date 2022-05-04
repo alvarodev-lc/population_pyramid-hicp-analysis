@@ -53,10 +53,7 @@ df = as.data.frame(kmdata_population[,1:54])
 df$cluster = factor(km$cluster)
 centers=as.data.frame(km$centers)
 
-# install.packages("countrycode")
-library(countrycode)
-countries = countrycode(copy_df$geo, "iso2c", "country.name")
-country_clusters = data.frame("Country" = countries, "cluster2001" = km$cluster)
+country_clusters = data.frame("Country" = copy_df$geo, "cluster2001" = km$cluster)
 
 # Population pyramids
 plot_pyramid_df <- function(df) {
