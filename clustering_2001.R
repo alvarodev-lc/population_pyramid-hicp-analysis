@@ -3,17 +3,16 @@ population_df = as.data.frame( read.csv("C:/repos/population_pyramid_analysis/pj
 #setwd("/home/alvaro/repos/data_science/population_pyramid_analysis")
 #population_df = as.data.frame( read.csv("pjangroup.csv",header=T,sep=";",dec=".") )
 
-# Take only population pyramid data for 2001, remove sex=T
+# Take only population pyramid data for 2001
 population_df = population_df[population_df$TIME_PERIOD == '2001',]
-# Uncomment to remove TOTAL age group
-# population_df = population_df[population_df$age != 'TOTAL',]
+
 
 # Remove unused columns
 population_df[8] = NULL
 population_df[1:4] = list(NULL)
 initial_df = population_df
 
-º# install.packages("tidyverse")
+# install.packages("tidyverse")
 library(tidyverse)
 
 # Tidy our data to get one column per country and one column per combination of sex/age_group
@@ -25,29 +24,21 @@ copy_df = population_df
 population_df[1] = NULL
 
 # Normalize data (21 age_groups, 3 sexes)
-
 F_total = population_df$F_TOTAL
 M_total = population_df$M_TOTAL
 T_total = population_df$T_TOTAL
 
-# Normalize F_AgeGroup columns with F_total values
 population_df[4:21] = population_df[4:21] / F_total
 population_df[22:39] = population_df[22:39] / M_total
 population_df[40:57] = population_df[40:57] / M_total
 
-# Set X_total columns to 1
-# population_df[1] = population_df[1] / F_total
-# population_df[2] = population_df[2] / M_total
-# population_df[3] = population_df[3] / T_total
+# Remove totals columns for clustering
 population_df[1:3] = list(NULL)
-
-
 
 
 # Clustering
 kmdata_population = as.matrix(population_df)
 kmdata = kmdata_population[,1:54]
-kmdata
 wss = numeric(15)
 for (k in 1:15) wss[k] <- sum(kmeans(kmdata, centers=k, nstart=25)$withinss)
 # Plot graphic to see the elbow
@@ -60,17 +51,6 @@ km
 df = as.data.frame(kmdata_population[,1:54])
 df$cluster = factor(km$cluster)
 centers=as.data.frame(km$centers)
-centers
-# install.packages("ggpubr")
-# install.packages("factoextra")
-library(ggpubr)
-library(factoextra)
-
-fviz_cluster(km, data = kmdata,
-             geom = "point",
-             ellipse.type = "convex", 
-             ggtheme = theme_bw()
-)
 
 # install.packages("countrycode")
 library(countrycode)
@@ -119,11 +99,12 @@ names(cluster1_df)[3] = "Poblation"
 names(cluster2_df)[3] = "Poblation"
 names(cluster3_df)[3] = "Poblation"
 
-# Plot poblation pyramids
+# Plot poblation pyramids by centroids
 plot_pyramid_df(cluster1_df)
 plot_pyramid_df(cluster2_df)
 plot_pyramid_df(cluster3_df)
 
+# Plot poblation pyramids by country
 plot_pyramid_country('FR')
 plot_pyramid_country('ES')
 plot_pyramid_country('MT')
