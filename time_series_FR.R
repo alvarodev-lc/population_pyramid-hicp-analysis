@@ -100,17 +100,22 @@ hist(arima_auto$residuals, xlab="Residuals", xlim=c(-1,1))
 qqnorm(arima_auto$residuals, main="")
 qqline(arima_auto$residuals)
 
-model = arima_auto
+arima_no_stationality <- arima (hicp,order=c(2,1,1))
+arima_no_stationality
+
+
+model = arima_no_stationality
 
 model.predict <- predict(model,n.ahead=3)
 plot(hicp, xlim=c(2021,2022.4),
      xlab = "Time (years)",
      ylab = "Harmonized price index",
-     ylim=c(70,120))
+     ylim=c(100,120))
 lines(model.predict$pred,col=2)
 lines(model.predict$pred+1.96*model.predict$se, col=3, lty=2)
 lines(model.predict$pred-1.96*model.predict$se, col=3, lty=2)
 lines(hicp_test,col=4)
 
 hicp_test
+model.predict$pred
 

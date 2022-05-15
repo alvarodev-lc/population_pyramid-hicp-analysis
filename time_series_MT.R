@@ -87,7 +87,6 @@ qqline(arima_2$residuals)
 #Comparamos con auto arima
 
 arima_auto = auto.arima(hicp,d=1,D=1,max.order=8,trace=TRUE,approx=FALSE,allowdrift=FALSE,stepwise=FALSE)
-
 arima_auto
 
 # examine ACF and PACF of the residuals
@@ -106,13 +105,16 @@ hist(arima_auto$residuals, xlab="Residuals", xlim=c(-1,1))
 qqnorm(arima_auto$residuals, main="")
 qqline(arima_auto$residuals)
 
-model = arima_2
+arima_no_stationality <- arima (hicp,order=c(2,1,0))
+arima_no_stationality
+
+model = arima_no_stationality
 
 model.predict <- predict(model,n.ahead=3)
 plot(hicp, xlim=c(2021,2022.4),
      xlab = "Time (years)",
      ylab = "Harmonized price index",
-     ylim=c(70,120))
+     ylim=c(80,115))
 lines(model.predict$pred,col=2)
 lines(model.predict$pred+1.96*model.predict$se, col=3, lty=2)
 lines(model.predict$pred-1.96*model.predict$se, col=3, lty=2)
